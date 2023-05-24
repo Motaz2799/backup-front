@@ -5,11 +5,19 @@
       <div class="row justify-content-center">
         <div class="col-md-6">
           <label for="app-select-src" class="form-label">Select a Source Application:</label>
-          <ComboBox :options="applicationsSource" :multiple="false" @option-selected="onSourceAppSelected" :defaultValue="{id:12, name:'defaulttest'}"></ComboBox>
+          <ComboBox
+            :options="applicationsSource"
+            :multiple="false"
+            @option-selected="onSourceAppSelected"
+          ></ComboBox>
         </div>
         <div class="col-md-6">
           <label for="app-select-target" class="form-label">Select a Target Application:</label>
-          <ComboBox :options="applicationsTarget" :multiple='false' @option-selected="onTargetAppSelected"></ComboBox>
+          <ComboBox
+            :options="applicationsTarget"
+            :multiple="false"
+            @option-selected="onTargetAppSelected"
+          ></ComboBox>
         </div>
       </div>
     </div>
@@ -145,27 +153,26 @@ export default {
     }
   },
   created() {
-    axios.get('http://localhost:8080/api/v1/applications/all')
-    .then((response) => {
-        const Applications = response.data.map((application) => {
-          return {
-            id: application.id,
-            name: application.appName
-          }
-        })
-        this.applications = Applications
-        this.applicationsTarget = this.applications
-        this.applicationsSource = this.applications
+    axios.get('http://localhost:8080/api/v1/applications/all').then((response) => {
+      const Applications = response.data.map((application) => {
+        return {
+          id: application.id,
+          name: application.appName
+        }
       })
+      this.applications = Applications
+      this.applicationsTarget = this.applications
+      this.applicationsSource = this.applications
+    })
   },
   methods: {
     onSourceAppSelected(selectedOption) {
-      this.selectedAppSrc = selectedOption.id;
-      this.applicationsTarget = this.applications.filter(app => app.id !== selectedOption.id);
+      this.selectedAppSrc = selectedOption.id
+      this.applicationsTarget = this.applications.filter((app) => app.id !== selectedOption.id)
     },
     onTargetAppSelected(selectedOption) {
-      this.selectedAppTarget = selectedOption.id;
-      this.applicationsSource = this.applications.filter(app => app.id !== selectedOption.id);
+      this.selectedAppTarget = selectedOption.id
+      this.applicationsSource = this.applications.filter((app) => app.id !== selectedOption.id)
     },
     submitInterfaces() {
       axios
@@ -184,9 +191,9 @@ export default {
           frequency: this.formData.frequency
         })
         .then((response) => {
-        console.log(response.data)
-        this.$router.push('/interfaces')
-          })
+          console.log(response.data)
+          this.$router.push('/interfaces')
+        })
         .catch((error) => {
           // handle error response
           console.log(error.response.data)

@@ -10,7 +10,7 @@
         :delete="'http://localhost:8080/api/v1/servers'"
         :edit="'/servers/edit/'"
         title="List of Servers"
-        addLink="/server/applications"
+        addLink="/servers/add"
         button="Add Server"
         :key="page"
       />

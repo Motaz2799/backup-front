@@ -36,7 +36,7 @@
             </select>
           </div>
           <div v-else-if="question.type === 'checkbox_group'">
-            <div v-for="(option, index) in question.options" :key="index" >
+            <div v-for="(option, index) in question.options" :key="index">
               <input
                 type="checkbox"
                 :id="option.id"
@@ -129,10 +129,7 @@
             />
           </div>
           <div v-else-if="question.type === 'select'">
-            <select
-              v-model="formResponse[question.id]"
-              @change="updateFormResponse(question.id)"
-            >
+            <select v-model="formResponse[question.id]" @change="updateFormResponse(question.id)">
               <option
                 v-for="(option, index) in question.options"
                 :value="option.option"

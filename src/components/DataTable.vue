@@ -30,19 +30,22 @@
               data-bs-target="#exampleModalToggleDB"
               >Via formulaire</a
             >
-            <a v-else class="dropdown-item" @click="GoToAddLink">Via formuaire</a>
+            <a v-else class="dropdown-item" @click="GoToAddLink">Via form</a>
           </li>
         </ul>
       </div>
     </caption>
 
-    <input
-      type="text"
-      v-model="searchTerm"
-      v-bind:placeholder="'Search'"
-      class="form-control"
-      style="width: 204px; height: 35px"
-    />
+    
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Live Search..."
+        v-model="searchQuery"
+        style="width: 204px; height: 35px"
+      />
+    
+
     <table class="table table-hover">
       <thead>
         <tr>
@@ -82,7 +85,7 @@
       </thead>
       <tbody>
         <tr v-for="row in filteredData" v-bind:key="row.id">
-          <td v-for="(column, index) in visibleColumns" :key="index" @click="goToDashbort(row.id)">
+          <td v-for="(column, index) in visibleColumns" :key="index" @click="goToDashbord(row.id)">
             {{ row[column.name] }}
           </td>
           <td>
@@ -107,6 +110,9 @@
               </ul>
             </div>
           </td>
+        </tr>
+        <tr v-if="filteredData.length === 0">
+          <td colspan="999">No matching items found.</td>
         </tr>
       </tbody>
     </table>
@@ -205,11 +211,9 @@
 </template>
 
 <script>
-import { isTemplateNode } from '@vue/compiler-core'
 import UploadExcel from '../views/UploadExcel.vue'
 import MapDB from '../views/MapDB.vue'
 import axios from 'axios'
-//import AddInterfaceView from '../views/AddInterfaceView.vue'
 
 export default {
   components: {
@@ -217,7 +221,7 @@ export default {
     MapDB
   },
   name: 'DataTable',
-  //components: {AddInterfaceView},
+
   props: {
     endpoint: {
       type: String,
@@ -251,12 +255,12 @@ export default {
   data() {
     return {
       data: [],
-      searchTerm: '',
       sortColumn: '',
       sortDirection: 'asc',
       visibleColumnsNames: [],
       noDC: 'no Dc ',
-      noENV: 'no ENV '
+      noENV: 'no ENV ',
+      searchQuery: ''
     }
   },
   created() {
@@ -309,13 +313,19 @@ export default {
   computed: {
     filteredData() {
       let filtered = this.data
-      if (this.searchTerm) {
+
+      if (this.searchQuery) {
         filtered = filtered.filter((row) => {
-          return Object.values(row).some((val) => {
-            return val.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-          })
-        })
+          for (const column of this.visibleColumns) {
+            const cellValue = String(row[column.name]).toLowerCase();
+            if (cellValue.includes(this.searchQuery.toLowerCase())) {
+              return true;
+            }
+          }
+          return false;
+        });
       }
+
 
       if (this.sortColumn) {
         const column = this.columns.find((c) => c.name === this.sortColumn)
@@ -374,19 +384,19 @@ export default {
       if (!confirmed) {
         return
       }
-        axios
-          .delete(this.delete + '/' + id)
-          .then(() => {
-            window.location.reload()
-          })
-          .catch((error) => {
-            console.error(error)
-          })
+      axios
+        .delete(this.delete + '/' + id)
+        .then(() => {
+          window.location.reload()
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
     getEditRoute(id) {
       let viewName = ''
       let params
-      //  params = { id1: row.id.applicationSrcId , id2: row.id.applicationTargetId }
+
       params = { id: id }
 
       switch (this.edit) {
@@ -417,7 +427,7 @@ export default {
 
       return { name: viewName, params }
     },
-    goToDashbort(id) {
+    goToDashbord(id) {
       if (this.title === 'List of Applications') {
         this.$router.push({ path: `/applications/${id}` })
       }
@@ -429,6 +439,10 @@ export default {
 }
 </script>
 <style>
+.input-group {
+  margin-bottom: 1rem;
+}
+
 .wide-column {
   display: flex;
   align-items: center;

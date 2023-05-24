@@ -28,6 +28,7 @@ import AddEnvironmentView from './views/AddEnvironmentView.vue'
 import Assessment from './views/Assessment.vue'
 import MainDashboard from './views/MainDashboard.vue'
 import AddServer from './components/AddServer.vue'
+import AddServerView from './views/AddServerView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -40,6 +41,7 @@ const router = createRouter({
     { path: '/servers', component: ServersView },
     { path: '/contacts', component: ContactView },
     { path: '/databases', component: DatabaseView },
+    { path: '/servers/add', component: AddServerView, props: true, name: 'AddServerView'},
 
     { path: '/interfaces', component: InterfacesView, name: 'interfaceView' },
     { path: '/applications/:id', component: MainDashboard, name: 'MainDashboard' },

@@ -2,6 +2,7 @@
   <div>
     <div class="btn-group" ref="dropdown">
       <button
+
         type="button"
         class="btn btn-secondary dropdown-toggle"
         :class="{ 'dropdown-open': isOpen, 'multiple-selection': multiple }"
@@ -9,6 +10,8 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
+      
+      
         <template v-if="selectedOptionName && selectedOptionName.length > 0">
           {{ selectedOptionName.slice(0, 3).join(', ') }}
           <template v-if="selectedOptionName.length > 3">
@@ -19,7 +22,9 @@
           {{ placeholder }}
         </template>
       </button>
-      <div class="dropdown-menu dropdown-menu-scrollable">
+
+      
+      <div  class="dropdown-menu dropdown-menu-scrollable" >
         <div class="input-group fixed-top">
           <span class="input-group-text" id="search-icon">
             <i class="bi bi-search"></i>
@@ -51,8 +56,26 @@
             {{ option.name }}
           </button>
           <div v-if="filteredOptions.length === 0">
-            <button v-if="addRessource === 'Add server'" type="button" class="dropdown-item" @click="showAdd" data-bs-toggle="modal" data-bs-target="#exampleModaleee">{{ addRessource }}</button>
-            <button v-if="addRessource === 'Add Environment'" type="button" class="dropdown-item" @click="showAdd" data-bs-toggle="modal" data-bs-target="#exampleModaleee">{{ addRessource }}</button>
+            <button
+              v-if="addRessource === 'Add server'"
+              type="button"
+              class="dropdown-item"
+              @click="showAdd"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModaleee"
+            >
+              {{ addRessource }}
+            </button>
+            <button
+              v-if="addRessource === 'Add Environment'"
+              type="button"
+              class="dropdown-item"
+              @click="showAdd"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModaleee"
+            >
+              {{ addRessource }}
+            </button>
           </div>
         </div>
       </div>
@@ -64,95 +87,95 @@
 export default {
   props: {
     options: {
-      type: Array,
+      type: Array
     },
     placeholder: {
       type: String,
-      default: "Select an option",
+      default: 'Select an option'
     },
     multiple: {
       type: Boolean,
-      default: true,
+      default: true
     },
     addRessource: {
       type: String,
-      default: '',
+      default: ''
     },
     defaultValue: {
       type: [Object, Array],
-      default: null,
-    },
+      default: null
+    }
   },
   data() {
     return {
       selectedOption: null,
-      searchTerm: "",
+      searchTerm: '',
       selectedOptions: [],
       selectedOptionName: [],
       isOpen: false,
-      defaultvalueModified: false,
-    };
+      defaultvalueModified: false
+    }
   },
   created() {
     if (this.defaultValue !== null) {
-      this.applyDefaultValue();
+      this.applyDefaultValue()
     }
   },
   watch: {
     defaultValue(newValue) {
       if (newValue !== null) {
-        this.applyDefaultValue();
+        this.applyDefaultValue()
       }
-    },
+    }
   },
   computed: {
-        filteredOptions() {
-            if (!this.searchTerm) {
-                return this.options;
-            }
-            const term = this.searchTerm.toLowerCase();
-            return this.options.filter((option) => option.name.toLowerCase().includes(term));
-        }
-    },
+    filteredOptions() {
+      if (!this.searchTerm) {
+        return this.options
+      }
+      const term = this.searchTerm.toLowerCase()
+      return this.options.filter((option) => option.name.toLowerCase().includes(term))
+    }
+  },
   methods: {
     applyDefaultValue() {
       if (Array.isArray(this.defaultValue)) {
-        this.selectedOptions = this.defaultValue;
-        this.selectedOptionName = this.defaultValue.map((option) => option.name);
+        this.selectedOptions = this.defaultValue
+        this.selectedOptionName = this.defaultValue.map((option) => option.name)
       } else {
-        this.selectedOptions = [this.defaultValue];
-        this.selectedOptionName = [this.defaultValue.name];
+        this.selectedOptions = [this.defaultValue]
+        this.selectedOptionName = [this.defaultValue.name]
       }
-      this.defaultvalueModified = true;
+      this.defaultvalueModified = true
     },
     showAdd() {
-      this.$emit("button-pop", true);
+      this.$emit('button-pop', true)
     },
     onOptionSelected(option) {
       if (this.multiple) {
         if (this.selectedOptions.includes(option)) {
-          const index = this.selectedOptions.indexOf(option);
-          this.selectedOptions.splice(index, 1);
+          const index = this.selectedOptions.indexOf(option)
+          this.selectedOptions.splice(index, 1)
         } else {
-          this.selectedOptions.push(option);
+          this.selectedOptions.push(option)
         }
-        this.selectedOptionName = this.selectedOptions.map((option) => option.name);
-        this.$emit("option-selected", this.selectedOptions);
+        this.selectedOptionName = this.selectedOptions.map((option) => option.name)
+        this.$emit('option-selected', this.selectedOptions)
       } else {
-        this.selectedOptions = [option];
-        this.selectedOptionName = option ? [option.name] : [];
-        this.$emit("option-selected", option);
-        this.isOpen = false;
+        this.selectedOptions = [option]
+        this.selectedOptionName = option ? [option.name] : []
+        this.$emit('option-selected', option)
+        
       }
     },
     toggleDropdown() {
-      this.isOpen = !this.isOpen;
-      if (!this.isOpen) {
-        this.$refs.dropdown.querySelector(".btn").blur();
-      }
-    },
-  },
-};
+      if(this.multiple){this.isOpen = !this.isOpen}
+      else{this.isOpen = false}
+      
+    }
+   
+  }
+}
 </script>
 
 <style>

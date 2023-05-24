@@ -24,19 +24,31 @@
         </div>
       </li>
       <li class="mb-1">
-        <button @click="handleLinkClick('Assessment')" class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse"
-          aria-expanded="false">Assessment</button>
+        <button
+          @click="handleLinkClick('Assessment')"
+          class="btn btn-toggle align-items-center rounded collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#dashboard-collapse"
+          aria-expanded="false"
+        >
+          Assessment
+        </button>
         <div class="collapse" id="dashboard-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             <li v-for="(step, index) in steps" :key="step.id">
-              <a  class="rounded" data-bs-toggle="collapse" data-bs-target="#category-collapse"
-          aria-expanded="false" @click="onStepChange(index+1)">
+              <a
+                class="rounded"
+                data-bs-toggle="collapse"
+                data-bs-target="#category-collapse"
+                aria-expanded="false"
+                @click="onStepChange(index + 1)"
+              >
                 {{ step.step }}
-            </a>
-              <div class="collapse" id="category-collapse" v-if="currentStepIndex === index+1">
-                <ul v-if="showCategories" >
+              </a>
+              <div class="collapse" id="category-collapse" v-if="currentStepIndex === index + 1">
+                <ul v-if="showCategories">
                   <li v-for="(category, index) in step.categories" :key="category.id">
-                    <a class="rounded" @click="onCategoryChange(index )">{{ category.category }}</a>
+                    <a class="rounded" @click="onCategoryChange(index)">{{ category.category }}</a>
                   </li>
                 </ul>
               </div>
@@ -47,7 +59,6 @@
     </ul>
   </div>
 </template>
-
 
 <script>
 import axios from 'axios'
@@ -80,7 +91,7 @@ export default {
       return this.categories[this.currentStepIndex] || []
     },
     currentCategory() {
-      console.log(this.currentStepIndex) 
+      console.log(this.currentStepIndex)
       return this.currentStepCategories[this.currentCategoryIndex] || {}
     }
   },
@@ -90,14 +101,15 @@ export default {
   },
   methods: {
     handleLinkClick(link) {
-      if(link==="Assessment"){
-        this.$emit('categoryChanged', this.categories[this.currentStepIndex][this.currentCategoryIndex])
-      }
-      else{ 
+      if (link === 'Assessment') {
+        this.$emit(
+          'categoryChanged',
+          this.categories[this.currentStepIndex][this.currentCategoryIndex]
+        )
+      } else {
         this.$emit('linkClicked', link)
         this.$emit('categoryChanged', {})
         this.fetchSteps(this.appID)
-
       }
     },
     async fetchAssessments() {
@@ -118,8 +130,7 @@ export default {
           this.steps = response1.data.steps
           this.steps.forEach((step) => {
             this.categories[step.id] = step.categories
-          },
-          console.log(this.categories))
+          }, console.log(this.categories))
         }
       } catch (error) {
         console.log(error)

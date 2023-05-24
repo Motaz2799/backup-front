@@ -33,7 +33,7 @@
         <Modal :appName="appName" :id="id" :selectedLink="selectedLink"></Modal>
       </div>
 
-      <new-data-table :headers="passHeaders()" :apiUrl="passUrl()" ></new-data-table>
+      <new-data-table :headers="passHeaders()" :apiUrl="passUrl()"></new-data-table>
     </div>
   </div>
 </template>
@@ -148,7 +148,7 @@ export default {
           label: 'Processing Mode'
         }
       ],
-      headers: [],
+      headers: []
     }
   },
 
@@ -160,7 +160,6 @@ export default {
         this.headers = this.DatabaseHeaders
       } else {
         this.headers = this.InterfaceHeaders
-        
       }
       return this.headers
     },

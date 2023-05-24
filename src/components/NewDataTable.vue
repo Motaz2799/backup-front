@@ -8,24 +8,42 @@
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.id">
-          <td v-for="header in headers" :key="header.name" >
+          <td v-for="header in headers" :key="header.name">
             <template v-if="header.name === 'environment'">
               <template v-if="item[header.name]">
                 {{ item[header.name].environmentName }}
               </template>
               <template v-else>
-                <img src="../assets/Add.svg" type="button" @click="addEnv(item.id)" data-bs-toggle="modal" data-bs-target="#AddEnvironment" alt="Add Environment" class="img-fluid add-image" />
+                <img
+                  src="../assets/Add.svg"
+                  type="button"
+                  @click="addEnv(item.id)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#AddEnvironment"
+                  alt="Add Environment"
+                  class="img-fluid add-image"
+                />
               </template>
             </template>
-            <template v-else-if="header.name === 'applicationSrc' || header.name === 'applicationTarget'  ">
-              {{ item[header.name].appName}}
+            <template
+              v-else-if="header.name === 'applicationSrc' || header.name === 'applicationTarget'"
+            >
+              {{ item[header.name].appName }}
             </template>
             <template v-else-if="header.name === 'datacenter'">
               <template v-if="item[header.name]">
                 {{ item[header.name].name }}
               </template>
               <template v-else>
-                <img src="../assets/Add.svg" type="button" @click="addDc(item.id)" data-bs-toggle="modal" data-bs-target="#AddDatacenter" alt="Add Datacenter" class="img-fluid add-image" />
+                <img
+                  src="../assets/Add.svg"
+                  type="button"
+                  @click="addDc(item.id)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#AddDatacenter"
+                  alt="Add Datacenter"
+                  class="img-fluid add-image"
+                />
               </template>
             </template>
             <template v-else>
@@ -47,18 +65,22 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title h5" id="exampleModalToggleLabel">
-            Add Environment
-          </h1>
+          <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Environment</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal">
             <span class="visually-hidden">Close</span>
           </button>
         </div>
         <div class="modal-body">
-          <Combobox :options="environments" :multiple="false" @option-selected="onEnvironmentSelected" addRessource='Add Environment'  ></Combobox>
+          <Combobox
+            :options="environments"
+            :multiple="false"
+            @option-selected="onEnvironmentSelected"
+            addRessource="Add Environment"
+          ></Combobox>
         </div>
         <div class="modal-footer">
-          <button @click="AddEnvironment" class="btn btn-primary">Submit</button></div>
+          <button @click="AddEnvironment" class="btn btn-primary">Submit</button>
+        </div>
       </div>
     </div>
   </div>
@@ -73,33 +95,32 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title h5" id="exampleModalToggleLabel">
-            Add Datacenter
-          </h1>
+          <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Datacenter</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal">
             <span class="visually-hidden">Close</span>
           </button>
         </div>
         <div class="modal-body">
-          <Combobox :options="datacenters" :multiple="false" @option-selected="onDatacenterSelected"  ></Combobox>
+          <Combobox
+            :options="datacenters"
+            :multiple="false"
+            @option-selected="onDatacenterSelected"
+          ></Combobox>
         </div>
         <div class="modal-footer">
-          <button @click="AddDatacenter" class="btn btn-primary">Submit</button></div>
+          <button @click="AddDatacenter" class="btn btn-primary">Submit</button>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
-
-
-
 
 <script>
 import axios from 'axios'
 import Combobox from './ComboBox.vue'
 
 export default {
-  components :{
+  components: {
     Combobox
   },
   props: {
@@ -114,14 +135,14 @@ export default {
   },
   data() {
     return {
-      serverID:0,
-      environmentToAdd : 0,
-      datacenterToAdd : 0,
+      serverID: 0,
+      environmentToAdd: 0,
+      datacenterToAdd: 0,
       items: [],
       noEnv: 'No Environment',
       noDc: 'No Datacenter',
-      datacenters:[],
-      environments:[]
+      datacenters: [],
+      environments: []
     }
   },
   watch: {
@@ -134,32 +155,32 @@ export default {
   },
 
   methods: {
-    addEnv(id){  
-      this.serverID=id
+    addEnv(id) {
+      this.serverID = id
       console.log(id)
-     axios.get('http://localhost:8080/api/v1/environments/all').then((response) => {
-         const Environments = response.data.map((environment) => {
-         return {
-           id: environment.id,
-           name: environment.environmentName
-         }
-       })
-         this.environments = Environments
-       })
-   },
-   addDc(id){  
-      this.serverID=id
+      axios.get('http://localhost:8080/api/v1/environments/all').then((response) => {
+        const Environments = response.data.map((environment) => {
+          return {
+            id: environment.id,
+            name: environment.environmentName
+          }
+        })
+        this.environments = Environments
+      })
+    },
+    addDc(id) {
+      this.serverID = id
       console.log(id)
       axios.get('http://localhost:8080/api/v1/datacenters/all').then((response) => {
-         const DCs = response.data.map((datacenter) => {
-         return {
-           id: datacenter.id,
-           name: datacenter.name
-         }
-       })
-         this.datacenters = DCs
-       })
-   },
+        const DCs = response.data.map((datacenter) => {
+          return {
+            id: datacenter.id,
+            name: datacenter.name
+          }
+        })
+        this.datacenters = DCs
+      })
+    },
     fetchItems() {
       axios
         .get(this.apiUrl)
@@ -171,30 +192,34 @@ export default {
           console.error(error)
         })
     },
-    onEnvironmentSelected(env){
-      this.environmentToAdd=env.id
+    onEnvironmentSelected(env) {
+      this.environmentToAdd = env.id
     },
-    onDatacenterSelected(Dc){
-      this.datacenterToAdd=Dc.id
+    onDatacenterSelected(Dc) {
+      this.datacenterToAdd = Dc.id
     },
-    AddEnvironment(){
+    AddEnvironment() {
       axios
-      .put(`http://localhost:8080/api/v1/servers/${this.serverID}/environment/link/${this.environmentToAdd}`)
-      .catch(console.error)
+        .put(
+          `http://localhost:8080/api/v1/servers/${this.serverID}/environment/link/${this.environmentToAdd}`
+        )
+        .catch(console.error)
       window.location.reload()
     },
-    AddDatacenter(){
+    AddDatacenter() {
       axios
-      .put(`http://localhost:8080/api/v1/servers/${this.serverID}/datacenter/link/${this.datacenterToAdd}`)
-      .catch(console.error)
+        .put(
+          `http://localhost:8080/api/v1/servers/${this.serverID}/datacenter/link/${this.datacenterToAdd}`
+        )
+        .catch(console.error)
       window.location.reload()
     }
-    
   }
 }
 </script>
 <style>
 .add-image {
-  width: 27px; 
-  height: 27px;}
+  width: 27px;
+  height: 27px;
+}
 </style>
