@@ -28,10 +28,51 @@
               type="button"
               data-bs-toggle="modal"
               data-bs-target="#exampleModalToggleDB"
-              >Via formulaire</a
+              >Via form</a
             >
-            <a v-else class="dropdown-item" @click="GoToAddLink">Via form</a>
-          </li>
+            <a
+              v-else-if="button === 'Add Application'"
+              class="dropdown-item"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleApplication"
+              >Via form</a>
+            <a
+              v-else-if="button === 'Add Server'"
+              class="dropdown-item"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleServer"
+              >Via form</a>
+              <a
+              v-else-if="button === 'Add Contacts'"
+              class="dropdown-item"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleContact"
+              >Via form</a>
+              <a
+              v-else-if="button === 'Add Interface'"
+              class="dropdown-item"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleInterface"
+              >Via form</a>
+              <a
+              v-else-if="button === 'Add Datacenter'"
+              class="dropdown-item"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleDatacenter"
+              >Via form</a>
+              <a
+              v-else-if="button === 'Add Environments'"
+              class="dropdown-item"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEnv"
+              >Via form</a>
+             </li>
         </ul>
       </div>
     </caption>
@@ -101,9 +142,58 @@
               </button>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" @click="deleteRessource(row.id)">Delete</a></li>
-                <router-link :to="getEditRoute(row.id)">
-                  <li><a class="dropdown-item" href="#">Edit</a></li>
-                </router-link>
+                  <li><a
+              v-if="button === 'Add Database'"
+              @click="setIdDB(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditDB"
+              >Edit</a>
+              <a
+              v-else-if="button === 'Add Server'"
+              @click="setIdServer(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditServer"
+              >Edit</a>
+              <a
+              v-else-if="button === 'Add Contacts'"
+              @click="setIdContact(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditContact"
+              >Edit</a>
+              <a
+              v-else-if="button === 'Add Interface'"
+              @click="setIdInterface(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditInterface"
+              >Edit</a>
+              <a
+              v-else-if="button === 'Add Datacenter'"
+              @click="setIdDatacenter(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditDatacenter"
+              >Edit</a>
+              <a
+              v-else-if="button === 'Add Environments'"
+              @click="setIdEnv(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditEnv"
+              >Edit</a>
+              <a
+              v-else-if="button === 'Add Application'"
+              @click="setIdApp(row.id)"
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalToggleEditApp"
+              >Edit</a>
+
+                </li>
+
                 <li v-if="title === 'List of Applications'">
                   <a class="dropdown-item" @click="onclickDownoald(row)">Download</a>
                 </li>
@@ -116,7 +206,8 @@
         </tr>
       </tbody>
     </table>
-    <div id="editResource">
+
+    <div id="AddExcel">
       <div
         class="modal fade"
         id="exampleModalToggle"
@@ -134,6 +225,56 @@
             </div>
             <div class="modal-body">
               <UploadExcel></UploadExcel>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showAddApplication">
+      <div
+        class="modal fade"
+        id="exampleModalToggleApplication"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Application</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <AddApplication></AddApplication>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showEditApplication">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditApp"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Application</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditApplication :idApp="idAppToEdit"></EditApplication>
             </div>
             <div class="modal-footer"></div>
           </div>
@@ -165,6 +306,288 @@
         </div>
       </div>
     </div>
+
+    <div id="showEditDataBase">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditDB"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Database</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditDB :idDb="idDbToEdit"></EditDB>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="showAddServer">
+      <div
+        class="modal fade"
+        id="exampleModalToggleServer"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Server</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <AddServerView></AddServerView>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showEditServer">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditServer"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Server</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditServer :idServ="idServToEdit"></EditServer>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showAddContact">
+      <div
+        class="modal fade"
+        id="exampleModalToggleContact"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Contact</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <AddContact></AddContact>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showEditContact">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditContact"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Contact</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditContact :idContact="idContactToEdit"></EditContact>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showAddInterface">
+      <div
+        class="modal fade"
+        id="exampleModalToggleInterface"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Interface</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <AddInterface></AddInterface>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="showEditInterface">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditInterface"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Interface</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditInterface :idInterface="idInterfaceToEdit"></EditInterface>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div id="showAddDatacenter">
+      <div
+        class="modal fade"
+        id="exampleModalToggleDatacenter"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Datacenter</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <AddDatacenter></AddDatacenter>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="showEditDatacenter">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditDatacenter"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Datacenter</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditDatacenter :idDc="idDCToEdit"></EditDatacenter>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="showAddEnv">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEnv"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Add Environment</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <AddEnv></AddEnv>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+    <div id="showEditEnv">
+      <div
+        class="modal fade"
+        id="exampleModalToggleEditEnv"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title h5" id="exampleModalToggleLabel">Edit Environment</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span class="visually-hidden">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <EditEnv :idEnv="idEnvToEdit"></EditEnv>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div id="showColumns">
       <div
@@ -213,12 +636,26 @@
 <script>
 import UploadExcel from '../views/UploadExcel.vue'
 import MapDB from '../views/MapDB.vue'
+import AddServerView from '../views/AddServerView.vue'
+import AddContact from '../views/MapAppContacts.vue'
+import AddInterface from '../views/AddInterfaceView.vue'
+import AddDatacenter from '../views/AddDataCenterView.vue'
+import AddEnv from '../views/AddEnvironmentView.vue'
+import EditDB from '../views/EditDatabaseView.vue'
+import EditServer from '../views/EditServerView.vue'
+import EditContact from '../views/EditContactView.vue'
+import EditInterface from '../views/EditInterfaceView.vue'
+import EditDatacenter from '../views/EditDataCenterView.vue'
+import EditEnv from '../views/EditEnvironmentView.vue'
+import AddApplication from '../views/MapAppServers.vue'
+import EditApplication from '../views/EditAppView.vue'
 import axios from 'axios'
 
 export default {
   components: {
     UploadExcel,
-    MapDB
+    MapDB,AddServerView,AddContact,AddInterface,AddDatacenter,AddEnv,AddApplication,
+    EditDB,EditServer,EditContact,EditInterface,EditDatacenter,EditEnv,EditApplication
   },
   name: 'DataTable',
 
@@ -255,6 +692,13 @@ export default {
   data() {
     return {
       data: [],
+      idDbToEdit:0,
+      idServToEdit:0,
+      idDCToEdit:0,
+      idEnvToEdit:0,
+      idAppToEdit:0,
+      idContactToEdit:0,
+      idInterfaceToEdit:0,
       sortColumn: '',
       sortDirection: 'asc',
       visibleColumnsNames: [],
@@ -432,9 +876,28 @@ export default {
         this.$router.push({ path: `/applications/${id}` })
       }
     },
-    GoToAddLink() {
-      this.$router.push({ path: `${this.addLink}` })
+    setIdDB(id){
+      this.idDbToEdit=id
+    },
+    setIdServer(id){
+      this.idServToEdit=id
+    },
+    setIdContact(id){
+      this.idContactToEdit=id
+    },
+    setIdInterface(id){
+      this.idInterfaceToEdit=id
+    },
+    setIdDatacenter(id){
+      this.idDCToEdit=id
+    },
+    setIdEnv(id){
+      this.idEnvToEdit=id
+    },
+    setIdApp(id){
+      this.idAppToEdit=id
     }
+
   }
 }
 </script>

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <Navbar></Navbar>
     <div class="container">
-      <form class="my-4">
+      <form class="mt-4">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <label class="form-label">
             {{ field.label }}
@@ -42,7 +41,6 @@
         <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
       </form>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -63,12 +61,22 @@ export default {
   components: {
     Navbar,
     Footer
-  },
+  },  
+  props: {
+    idDc: Number},
   data() {
     return {
       formData: {},
       formFields: [],
       endpoint: ''
+    }
+  },  
+  watch: {
+    idDc: {
+      immediate: true,
+      handler(newIdDc) {
+        this.loadData(newIdDc);
+      }
     }
   },
 
@@ -78,20 +86,19 @@ export default {
 
     this.endpoint = 'http://localhost:8080/api/v1/datacenters'
   },
-  mounted() {
-    const id = this.$route.params.id
-    console.log(id)
-    axios
-      .get(`${this.endpoint}/${id}`)
-      .then((response) => {
-        this.formData = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  },
 
   methods: {
+    loadData(idDc) {
+      if(idDc!==0){
+      axios
+        .get(`${this.endpoint}/${idDc}`)
+        .then((response) => {
+          this.formData = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }},
     submitForm() {
       // Check if required fields are empty
       for (const field of this.formFields) {
@@ -100,13 +107,13 @@ export default {
           return
         }
       }
-      const id = this.$route.params.id
 
       axios
-        .put(`${this.endpoint}/${id}`, this.formData)
+        .put(`${this.endpoint}/${this.idDc}`, this.formData)
         .then((response) => {
           console.log(response.data)
           alert('Datacenter' + this.formData.name + 'has been updated')
+          window.location.reload()
           this.$router.push({ path: '/datacenters' })
         })
         .catch((error) => {

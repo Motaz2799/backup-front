@@ -1,5 +1,4 @@
 <template>
-    <Navbar></Navbar>
     <div>
       <div class="container my-3">
         <div class="row justify-content-center">
@@ -56,7 +55,6 @@
         </form>
       </div>
     </div>
-    <Footer></Footer>
   </template>
   
   <script>
@@ -153,6 +151,8 @@
               .catch(console.error)
           } else {
             console.log('nothing to map')
+            alert('Resource created successfully!')
+            window.location.reload() 
           }
         })
       },
@@ -178,8 +178,9 @@
             this.envDcAdd(response.data.id, this.selectedDataCenter.id, this.selectedEnvironment.id)
               .then(() => {
                 
-                    this.$router.push('/servers')
-                  })
+                alert('Resource created successfully!')
+                window.location.reload()            
+                   })
                   .catch((error) => {
                     console.error(error)
                   })

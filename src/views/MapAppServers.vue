@@ -1,7 +1,6 @@
 <template>
   <div>
-    <Navbar></Navbar>
-    <div class="container my-5 mx-5">
+    <div class="container my-3 mx-0">
       <div class="container">
         <form class="my-4">
           <div v-for="(field, index) in formFields" :key="index" class="mb-3">
@@ -44,7 +43,6 @@
       </div>
     </div>
   </div>
-  <Footer></Footer>
 </template>
 
 <script>
@@ -87,7 +85,7 @@ export default {
     }
   },
   created() {
-    axios.get('http://localhost:8080/api/v1/servers/non-archived').then((response) => {
+    axios.get('http://localhost:8080/api/v1/servers/all').then((response) => {
       const Servs = response.data.map((server) => {
         return {
           id: server.id,
@@ -127,6 +125,7 @@ export default {
               .then((response) => {
                 console.log(response.data)
                 alert('Resource created successfully!')
+                window.location.reload()
                 this.$router.push('/applications')
               })
               .catch((error) => {
@@ -155,6 +154,7 @@ export default {
                     )
                     .then(() => {
                       alert('Resource created successfully!')
+                      window.location.reload()
                       this.$router.push('/applications')
                     })
                 })
@@ -185,6 +185,7 @@ export default {
                     .then(() => {})
                 })
                 alert('Resource created successfully!')
+                window.location.reload()
                 this.$router.push('/applications')
               })
           } else {
@@ -219,6 +220,7 @@ export default {
                     .then(() => {})
                 })
                 alert('Resource created successfully!')
+                window.location.reload()
                 this.$router.push('/applications')
               })
           }

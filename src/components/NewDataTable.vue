@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div >
     <table class="table table-responsive table-hover">
       <thead>
         <tr>
-          <th v-for="header in headers" :key="header">{{ header.label }}</th>
+          <th v-for="header in headers" :key="header" >{{ header.label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.id">
-          <td v-for="header in headers" :key="header.name">
+          <td v-for="header in headers" :key="header.name" >
             <template v-if="header.name === 'environment'">
               <template v-if="item[header.name]">
                 {{ item[header.name].environmentName }}
@@ -50,6 +50,15 @@
               {{ item[header.name] }}
             </template>
           </td>
+          <td>
+            <div class="btn-group">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Actions
+            </button>
+            <ul class="dropdown-menu ">
+              <li><a class="dropdown-item" @click="removeItem(row.id)">Remove </a></li>
+            </ul>
+          </div></td>
         </tr>
       </tbody>
     </table>
@@ -213,7 +222,7 @@ export default {
         )
         .catch(console.error)
       window.location.reload()
-    }
+    },
   }
 }
 </script>
@@ -222,4 +231,8 @@ export default {
   width: 27px;
   height: 27px;
 }
+.wide-column {
+  display: flex;
+}
+
 </style>

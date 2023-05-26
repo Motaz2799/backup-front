@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Navbar></Navbar>
     <div class="container">
       <form class="my-4">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
@@ -35,7 +34,6 @@
         <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
       </form>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -74,6 +72,9 @@ export default {
     Navbar,
     Footer
   },
+  props:{
+    idApp: Number
+  },
   data() {
     return {
       formData: {},
@@ -81,42 +82,47 @@ export default {
       endpoint: ''
     }
   },
-
+  watch: {
+    idApp: {
+      immediate: true,
+      handler(newIdApp) {
+        this.loadData(newIdApp);
+      }
+    }
+  },
   created() {
     const formConfig = FORM_CONFIGS.applicationsView
     this.formFields = formConfig || []
 
     this.endpoint = 'http://localhost:8080/api/v1/applications'
   },
-  mounted() {
-    const id = this.$route.params.id
-    console.log(id)
-    axios
-      .get(`${this.endpoint}/${id}`)
-      .then((response) => {
-        this.formData = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  },
+
 
   methods: {
+    loadData(idApp) {
+      if(idApp!==0){
+      axios
+        .get(`${this.endpoint}/${idApp}`)
+        .then((response) => {
+          this.formData = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }},
     submitForm() {
-      // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
           alert(`${field.label} is required`)
           return
         }
       }
-      const id = this.$route.params.id
-
       axios
-        .put(`${this.endpoint}/${id}`, this.formData)
+        .put(`${this.endpoint}/${this.idApp}`, this.formData)
         .then((response) => {
           console.log(response.data)
           alert('Application' + this.formData.appName + 'has been updated')
+          window.location.reload()
           this.$router.push({ path: '/Applications' })
         })
         .catch((error) => {

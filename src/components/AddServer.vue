@@ -147,6 +147,8 @@ export default {
             .catch(console.error)
         } else {
           console.log('nothing to map')
+          alert('Resource created and added successfully!')
+          window.location.reload()
         }
       })
     },
@@ -182,7 +184,8 @@ export default {
                   }
                 )
                 .then(() => {
-                  this.$router.go(0)
+                  alert('Resource created and added successfully!')
+                  window.location.reload()
                 })
                 .catch((error) => {
                   console.error(error)

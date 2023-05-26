@@ -1,7 +1,6 @@
 <template>
   <div>
-    <Navbar></Navbar>
-    <div class="container my-5">
+    <div class="mb-3">
       <div class="row justify-content-center">
         <div class="col-md-6">
           <label for="app-select-src" class="form-label">Select a Source Application:</label>
@@ -62,8 +61,6 @@
         <button class="btn btn-primary" @click="submitInterfaces">Add interface</button>
       </form>
     </div>
-
-    <Footer></Footer>
   </div>
 </template>
 
@@ -192,7 +189,8 @@ export default {
         })
         .then((response) => {
           console.log(response.data)
-          this.$router.push('/interfaces')
+          alert('Resource created successfully!')
+          window.location.reload()
         })
         .catch((error) => {
           // handle error response

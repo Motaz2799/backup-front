@@ -1,8 +1,7 @@
 <template>
   <div>
-    <Navbar></Navbar>
     <div class="container">
-      <div class="container my-3">
+      <div class="mt-5">
         <div class="row align-items-center">
         <div class="col-md-6">
           <label for="dc_select" class="form-label">Select an application:</label>
@@ -72,7 +71,6 @@
         <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
       </form>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -84,6 +82,9 @@ import ComboBox from '../components/ComboBox.vue'
 
 
 export default {
+  props:{
+    idInterface: Number
+  },
   components: {
     Navbar,
     Footer,
@@ -102,24 +103,19 @@ export default {
       applicationsSource: [],
       applicationsTarget: [],
     }
+  },  
+  watch: {
+    idInterface: {
+      immediate: true,
+      handler(newIdInterface) {
+        if (newIdInterface !== 0) {
+          this.loadData(newIdInterface);
+        }
+      }
+    }
   },
 
   mounted() {
-    axios.get("http://localhost:8080/api/v1/applications/all")
-      .then((response) => {
-        const apps = response.data.map((application) => {
-          return {
-            id: application.id,
-            name: application.appName
-          }
-        })
-        this.applications = apps
-        this.applicationsTarget = this.application
-        this.applicationsTarget = this.applications.filter(app => app.id !== this.formData.applicationSrc.id);
-        this.applicationsSource = this.applications
-        this.applicationsSource = this.applications.filter(app => app.id !== this.formData.applicationTarget.id);
-      
-      })
     const FORM_CONFIGS = {
       interfacesView: [
         { name: 'applicationSrc', label: 'Source app', type: 'selectApps', required: true },
@@ -174,9 +170,27 @@ export default {
 
     this.endpoint = 'http://localhost:8080/api/v1/interfaces'
 
-    const id = this.$route.params.id
-    
-    
+
+  },
+
+  methods: {
+    loadData(id){
+      if(id!==0){
+      axios.get("http://localhost:8080/api/v1/applications/all")
+      .then((response) => {
+        const apps = response.data.map((application) => {
+          return {
+            id: application.id,
+            name: application.appName
+          }
+        })
+        this.applications = apps
+        this.applicationsTarget = this.application
+        this.applicationsTarget = this.applications.filter(app => app.id !== this.formData.applicationSrc.id);
+        this.applicationsSource = this.applications
+        this.applicationsSource = this.applications.filter(app => app.id !== this.formData.applicationTarget.id);
+      
+      })
 
     axios
       .get(`${this.endpoint}/${id}`)
@@ -189,10 +203,8 @@ export default {
       })
       .catch((error) => {
         console.log(error)
-      })
-  },
-
-  methods: {
+      })}
+    },
     submitForm() {
       console.log("el formdata melowel")
       console.log(this.formData)
@@ -205,7 +217,6 @@ export default {
         }
       }
 
-      const id = this.$route.params.id
       const idsrc = this.selectedAppSrc
       const idtarget = this.selectedAppTarget
       const protocol = this.formData.protocol
@@ -225,10 +236,11 @@ export default {
         processingMode: processingMode
       }
       axios
-        .put(`${this.endpoint}/${id}`, x)
+        .put(`${this.endpoint}/${this.idInterface}`, x)
         .then((response) => {
           console.log(response.data)
           alert('Interface' + this.formData + 'has been updated')
+          window.location.reload()
           this.$router.push({ path: '/interfaces' })
         })
         .catch((error) => {

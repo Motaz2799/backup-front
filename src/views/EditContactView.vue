@@ -1,8 +1,7 @@
 <template>
   <div>
-    <Navbar></Navbar>
     <div class="container">
-      <form class="my-4">
+      <form class="mt-5">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <label class="form-label">
             {{ field.label }}
@@ -35,7 +34,6 @@
         <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
       </form>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -70,6 +68,9 @@ const FORM_CONFIGS = {
 }
 
 export default {
+  props :{
+    idContact:Number
+  },
   components: {
     Navbar,
     Footer
@@ -81,6 +82,14 @@ export default {
       endpoint: ''
     }
   },
+  watch: {
+    idContact: {
+      immediate: true,
+      handler(newIdContact) {
+        this.loadData(newIdContact);
+      }
+    }
+  },
 
   created() {
     const formConfig = FORM_CONFIGS.contactsView
@@ -88,20 +97,18 @@ export default {
 
     this.endpoint = 'http://localhost:8080/api/v1/contacts'
   },
-  mounted() {
-    const id = this.$route.params.id
-    console.log(id)
-    axios
-      .get(`${this.endpoint}/${id}`)
-      .then((response) => {
-        this.formData = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  },
-
   methods: {
+    loadData(idContact) {
+      if(idContact!==0){
+      axios
+        .get(`${this.endpoint}/${this.idContact}`)
+        .then((response) => {
+          this.formData = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }},
     submitForm() {
       // Check if required fields are empty
       for (const field of this.formFields) {
@@ -110,13 +117,13 @@ export default {
           return
         }
       }
-      const id = this.$route.params.id
 
       axios
-        .put(`${this.endpoint}/${id}`, this.formData)
+        .put(`${this.endpoint}/${this.idContact}`, this.formData)
         .then((response) => {
           console.log(response.data)
           alert('Contacts' + this.formData.fullName + 'has been updated')
+          window.location.reload()
           this.$router.push({ path: '/contacts' })
         })
         .catch((error) => {

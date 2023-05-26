@@ -106,6 +106,7 @@ export default {
             })
             .then((response) => {
               console.log(response.data)
+              window.location.reload()
               alert('Resource created successfully!')
             })
             .catch((error) => {

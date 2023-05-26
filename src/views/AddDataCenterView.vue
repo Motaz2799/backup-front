@@ -1,10 +1,8 @@
 <template>
   <div>
-    <Navbar></Navbar>
-
-    <div class="container my-5 mx-5">
+    <div class="mb-3">
       <div class="container">
-        <form class="my-4">
+        <form class="mt-5">
           <div v-for="(field, index) in formFields" :key="index" class="mb-3">
             <label class="form-label">
               {{ field.label }}
@@ -41,12 +39,11 @@
               </select>
             </template>
           </div>
-          <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
+          <button @click.prevent="submit" class="btn btn-primary"  >Next</button>
         </form>
       </div>
     </div>
 
-    <Footer></Footer>
   </div>
 </template>
 
@@ -74,16 +71,20 @@ export default {
       ]
     }
   },
-  created() {},
   methods: {
     submitForm() {
-      // Check if required fields are empty
-      for (const field of this.formFields) {
-        if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
-        }
-      }
+          // Check if required fields are empty
+          for (const field of this.formFields) {
+            if (field.required && !this.formData[field.name]) {
+              alert(`${field.label} is required`);
+              return false;
+            }
+          }
+          
+          return true;
+        },
+      submit(){
+        if(this.submitForm()==true){
       this.responseDataCenter = JSON.stringify(this.formData)
 
       axios
@@ -95,12 +96,12 @@ export default {
         .then((response) => {
           console.log(response.data)
           alert('Resource created successfully!')
+          window.location.reload()
           this.$router.push('/datacenters')
         })
         .catch((error) => {
           console.error(error)
         })
-    }
+    }}}
   }
-}
 </script>

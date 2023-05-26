@@ -1,8 +1,7 @@
 <template>
-  <Navbar></Navbar>
-  <div class="container my-5 mx-5">
+  <div class="mb-3">
     <div class="container">
-      <form class="my-4">
+      <form class="mt-5">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <label class="form-label">
             {{ field.label }}
@@ -38,7 +37,6 @@
       </form>
     </div>
   </div>
-  <Footer></Footer>
 </template>
 
 <script>
@@ -106,6 +104,7 @@ export default {
             .then((response) => {
               console.log(response.data)
               alert('Resource created successfully!')
+              window.location.reload()
               this.$router.push('/contacts')
             })
             .catch((error) => {
@@ -135,6 +134,7 @@ export default {
                   )
                   .then(() => {
                     alert('Resource created successfully!')
+                    window.location.reload()
                     this.$router.push('/contacts')
                   })
               })

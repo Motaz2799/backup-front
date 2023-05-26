@@ -192,6 +192,10 @@ export default {
                 }
               }
             )
+            .then(() => {
+              alert('Resource added successfully!')
+              window.location.reload()
+                })
             .catch((error) => {
               console.error(error)
             })

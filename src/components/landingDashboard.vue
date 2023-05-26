@@ -62,7 +62,7 @@
               tabindex="-1"
               aria-selected="false"
               aria-controls="servers"
-              >Serveurs</a
+              >Servers</a
             >
           </li>
         </ul>

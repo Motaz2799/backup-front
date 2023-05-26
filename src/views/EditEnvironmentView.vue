@@ -1,8 +1,7 @@
 <template>
   <div>
-    <Navbar></Navbar>
     <div class="container">
-      <form class="my-4">
+      <form class="mt-4">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <label class="form-label">
             {{ field.label }}
@@ -42,7 +41,6 @@
         <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
       </form>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -78,11 +76,21 @@ export default {
     Navbar,
     Footer
   },
+  props: {
+    idEnv: Number},
   data() {
     return {
       formData: {},
       formFields: [],
       endpoint: ''
+    }
+  },  
+  watch: {
+    idEnv: {
+      immediate: true,
+      handler(newIdEnv) {
+        this.loadData(newIdEnv);
+      }
     }
   },
 
@@ -92,20 +100,19 @@ export default {
 
     this.endpoint = 'http://localhost:8080/api/v1/environments'
   },
-  mounted() {
-    const id = this.$route.params.id
-    console.log(id)
-    axios
-      .get(`${this.endpoint}/${id}`)
-      .then((response) => {
-        this.formData = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  },
 
   methods: {
+    loadData(idEnv) {
+      if(idEnv!==0){
+      axios
+        .get(`${this.endpoint}/${idEnv}`)
+        .then((response) => {
+          this.formData = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }},
     submitForm() {
       // Check if required fields are empty
       for (const field of this.formFields) {
@@ -114,13 +121,13 @@ export default {
           return
         }
       }
-      const id = this.$route.params.id
 
       axios
-        .put(`${this.endpoint}/${id}`, this.formData)
+        .put(`${this.endpoint}/${this.idEnv}`, this.formData)
         .then((response) => {
           console.log(response.data)
           alert('Environment' + this.formData.environmentName + 'has been updated')
+          window.location.reload()
           this.$router.push({ path: '/environments' })
         })
         .catch((error) => {
