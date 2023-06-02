@@ -72,7 +72,7 @@ export default {
     Navbar,
     Footer
   },
-  props:{
+  props: {
     idApp: Number
   },
   data() {
@@ -86,7 +86,7 @@ export default {
     idApp: {
       immediate: true,
       handler(newIdApp) {
-        this.loadData(newIdApp);
+        this.loadData(newIdApp)
       }
     }
   },
@@ -97,19 +97,19 @@ export default {
     this.endpoint = 'http://localhost:8080/api/v1/applications'
   },
 
-
   methods: {
     loadData(idApp) {
-      if(idApp!==0){
-      axios
-        .get(`${this.endpoint}/${idApp}`)
-        .then((response) => {
-          this.formData = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }},
+      if (idApp !== 0) {
+        axios
+          .get(`${this.endpoint}/${idApp}`)
+          .then((response) => {
+            this.formData = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     submitForm() {
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {

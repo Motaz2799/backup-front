@@ -77,19 +77,20 @@ export default {
     Footer
   },
   props: {
-    idEnv: Number},
+    idEnv: Number
+  },
   data() {
     return {
       formData: {},
       formFields: [],
       endpoint: ''
     }
-  },  
+  },
   watch: {
     idEnv: {
       immediate: true,
       handler(newIdEnv) {
-        this.loadData(newIdEnv);
+        this.loadData(newIdEnv)
       }
     }
   },
@@ -103,16 +104,17 @@ export default {
 
   methods: {
     loadData(idEnv) {
-      if(idEnv!==0){
-      axios
-        .get(`${this.endpoint}/${idEnv}`)
-        .then((response) => {
-          this.formData = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }},
+      if (idEnv !== 0) {
+        axios
+          .get(`${this.endpoint}/${idEnv}`)
+          .then((response) => {
+            this.formData = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     submitForm() {
       // Check if required fields are empty
       for (const field of this.formFields) {

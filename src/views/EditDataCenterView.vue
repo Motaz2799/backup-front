@@ -61,21 +61,22 @@ export default {
   components: {
     Navbar,
     Footer
-  },  
+  },
   props: {
-    idDc: Number},
+    idDc: Number
+  },
   data() {
     return {
       formData: {},
       formFields: [],
       endpoint: ''
     }
-  },  
+  },
   watch: {
     idDc: {
       immediate: true,
       handler(newIdDc) {
-        this.loadData(newIdDc);
+        this.loadData(newIdDc)
       }
     }
   },
@@ -89,16 +90,17 @@ export default {
 
   methods: {
     loadData(idDc) {
-      if(idDc!==0){
-      axios
-        .get(`${this.endpoint}/${idDc}`)
-        .then((response) => {
-          this.formData = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }},
+      if (idDc !== 0) {
+        axios
+          .get(`${this.endpoint}/${idDc}`)
+          .then((response) => {
+            this.formData = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     submitForm() {
       // Check if required fields are empty
       for (const field of this.formFields) {

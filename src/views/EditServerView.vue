@@ -5,11 +5,21 @@
         <div class="row justify-content-center">
           <div class="col-md-6">
             <label for="dc_select" class="form-label">Select a Datacenter:</label>
-            <ComboBox :options="datacenters" :multiple="false" @option-selected="onDatacenterSelected" :defaultValue="defaultValueDC"></ComboBox>
+            <ComboBox
+              :options="datacenters"
+              :multiple="false"
+              @option-selected="onDatacenterSelected"
+              :defaultValue="defaultValueDC"
+            ></ComboBox>
           </div>
           <div class="col-md-6">
             <label for="env-select" class="form-label">Select an Environment:</label>
-            <ComboBox :options="environments" :multiple="false" @option-selected="onEnvironmentSelected" :defaultValue="defaultValueENV"></ComboBox>
+            <ComboBox
+              :options="environments"
+              :multiple="false"
+              @option-selected="onEnvironmentSelected"
+              :defaultValue="defaultValueENV"
+            ></ComboBox>
           </div>
         </div>
       </div>
@@ -123,7 +133,7 @@ export default {
       immediate: true,
       handler(newIdServ) {
         if (newIdServ !== 0) {
-          this.loadData(newIdServ);
+          this.loadData(newIdServ)
         }
       }
     }
@@ -160,9 +170,15 @@ export default {
         .get(`${this.endpoint}/${this.idServ}`)
         .then((response) => {
           this.formData = response.data
-          this.defaultValueDC = { id: this.formData.datacenter.id, name: this.formData.datacenter.name }
+          this.defaultValueDC = {
+            id: this.formData.datacenter.id,
+            name: this.formData.datacenter.name
+          }
           this.selectedDataCenter = this.formData.datacenter.id
-          this.defaultValueENV = { id: this.formData.environment.id, name: this.formData.environment.environmentName }
+          this.defaultValueENV = {
+            id: this.formData.environment.id,
+            name: this.formData.environment.environmentName
+          }
           this.selectedEnvironment = this.formData.environment.id
         })
         .catch((error) => {
@@ -177,14 +193,20 @@ export default {
         .get(`${this.endpoint}/${idDb}`)
         .then((response) => {
           this.formData = response.data
-          this.defaultValueDC = { id: this.formData.datacenter.id, name: this.formData.datacenter.name }
+          this.defaultValueDC = {
+            id: this.formData.datacenter.id,
+            name: this.formData.datacenter.name
+          }
           this.selectedDataCenter = this.formData.datacenter.id
-          this.defaultValueENV = { id: this.formData.environment.id, name: this.formData.environment.environmentName }
+          this.defaultValueENV = {
+            id: this.formData.environment.id,
+            name: this.formData.environment.environmentName
+          }
           this.selectedEnvironment = this.formData.environment.id
         })
         .catch((error) => {
           console.log(error)
-        });
+        })
     },
     envDcAdd(resp, dcId, envId) {
       return new Promise((resolve) => {
@@ -225,8 +247,12 @@ export default {
       if (this.selectedDataCenter !== 0 && this.selectedEnvironment !== 0) {
         this.envDcAdd(this.idServ, this.selectedDataCenter, this.selectedEnvironment)
           .then(() => {
-            this.formData.datacenter = this.datacenters.find(dc => dc.id === this.selectedDataCenter)
-            this.formData.environment = this.environments.find(env => env.id === this.selectedEnvironment)
+            this.formData.datacenter = this.datacenters.find(
+              (dc) => dc.id === this.selectedDataCenter
+            )
+            this.formData.environment = this.environments.find(
+              (env) => env.id === this.selectedEnvironment
+            )
             axios
               .put(`${this.endpoint}/${this.idServ}`, this.formData)
               .then((response) => {
@@ -261,7 +287,7 @@ export default {
     },
     onEnvironmentSelected(selectedOption) {
       this.selectedEnvironment = selectedOption.id
-    },
+    }
   }
 }
 </script>

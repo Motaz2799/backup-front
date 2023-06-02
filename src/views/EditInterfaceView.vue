@@ -3,24 +3,33 @@
     <div class="container">
       <div class="mt-5">
         <div class="row align-items-center">
-        <div class="col-md-6">
-          <label for="dc_select" class="form-label">Select an application:</label>
-          <ComboBox :options="applicationsSource" :multiple="false" @option-selected="onSourceAppSelected" :defaultValue="defaultValueSource"></ComboBox>
-
+          <div class="col-md-6">
+            <label for="dc_select" class="form-label">Select an application:</label>
+            <ComboBox
+              :options="applicationsSource"
+              :multiple="false"
+              @option-selected="onSourceAppSelected"
+              :defaultValue="defaultValueSource"
+            ></ComboBox>
+          </div>
+          <div class="col-md-6">
+            <label for="dc_select" class="form-label">Select an application:</label>
+            <ComboBox
+              :options="applicationsTarget"
+              :multiple="false"
+              @option-selected="onTargetAppSelected"
+              :defaultValue="defaultValueTarget"
+            ></ComboBox>
+          </div>
         </div>
-        <div class="col-md-6">
-          <label for="dc_select" class="form-label">Select an application:</label>
-          <ComboBox :options="applicationsTarget" :multiple='false' @option-selected="onTargetAppSelected" :defaultValue="defaultValueTarget"></ComboBox>
-        </div>
-      </div>
       </div>
       <form class="my-4">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <template v-if="field.type === 'text'">
             <label class="form-label">
-            {{ field.label }}
-            <span v-if="field.required" class="required">*</span>
-          </label>
+              {{ field.label }}
+              <span v-if="field.required" class="required">*</span>
+            </label>
             <input
               :type="field.type"
               v-model="formData[field.name]"
@@ -30,9 +39,9 @@
           </template>
           <template v-else-if="field.type === 'textarea'">
             <label class="form-label">
-            {{ field.label }}
-            <span v-if="field.required" class="required">*</span>
-          </label>
+              {{ field.label }}
+              <span v-if="field.required" class="required">*</span>
+            </label>
             <textarea
               v-model="formData[field.name]"
               class="form-control"
@@ -41,9 +50,9 @@
           </template>
           <template v-else-if="field.type === 'number'">
             <label class="form-label">
-            {{ field.label }}
-            <span v-if="field.required" class="required">*</span>
-          </label>
+              {{ field.label }}
+              <span v-if="field.required" class="required">*</span>
+            </label>
             <input
               v-model="formData[field.name]"
               class="form-control"
@@ -53,9 +62,9 @@
           </template>
           <template v-else-if="field.type === 'select'">
             <label class="form-label">
-            {{ field.label }}
-            <span v-if="field.required" class="required">*</span>
-          </label>
+              {{ field.label }}
+              <span v-if="field.required" class="required">*</span>
+            </label>
             <select
               v-model="formData[field.name]"
               class="form-select"
@@ -80,9 +89,8 @@ import Footer from '@/components/Footer.vue'
 import axios from 'axios'
 import ComboBox from '../components/ComboBox.vue'
 
-
 export default {
-  props:{
+  props: {
     idInterface: Number
   },
   components: {
@@ -96,20 +104,20 @@ export default {
       formFields: [],
       endpoint: '',
       applications: [],
-      selectedAppSrc:0,
-      selectedAppTarget:0,
-      defaultValueSource:null,
-      defaultValueTarget:null,
+      selectedAppSrc: 0,
+      selectedAppTarget: 0,
+      defaultValueSource: null,
+      defaultValueTarget: null,
       applicationsSource: [],
-      applicationsTarget: [],
+      applicationsTarget: []
     }
-  },  
+  },
   watch: {
     idInterface: {
       immediate: true,
       handler(newIdInterface) {
         if (newIdInterface !== 0) {
-          this.loadData(newIdInterface);
+          this.loadData(newIdInterface)
         }
       }
     }
@@ -169,46 +177,53 @@ export default {
     this.formFields = formConfig || []
 
     this.endpoint = 'http://localhost:8080/api/v1/interfaces'
-
-
   },
 
   methods: {
-    loadData(id){
-      if(id!==0){
-      axios.get("http://localhost:8080/api/v1/applications/all")
-      .then((response) => {
-        const apps = response.data.map((application) => {
-          return {
-            id: application.id,
-            name: application.appName
-          }
+    loadData(id) {
+      if (id !== 0) {
+        axios.get('http://localhost:8080/api/v1/applications/all').then((response) => {
+          const apps = response.data.map((application) => {
+            return {
+              id: application.id,
+              name: application.appName
+            }
+          })
+          this.applications = apps
+          this.applicationsTarget = this.application
+          this.applicationsTarget = this.applications.filter(
+            (app) => app.id !== this.formData.applicationSrc.id
+          )
+          this.applicationsSource = this.applications
+          this.applicationsSource = this.applications.filter(
+            (app) => app.id !== this.formData.applicationTarget.id
+          )
         })
-        this.applications = apps
-        this.applicationsTarget = this.application
-        this.applicationsTarget = this.applications.filter(app => app.id !== this.formData.applicationSrc.id);
-        this.applicationsSource = this.applications
-        this.applicationsSource = this.applications.filter(app => app.id !== this.formData.applicationTarget.id);
-      
-      })
 
-    axios
-      .get(`${this.endpoint}/${id}`)
-      .then((response) => {
-        this.formData = response.data
-        this.defaultValueSource={id:this.formData.applicationSrc.id ,name:this.formData.applicationSrc.appName}
-        this.defaultValueTarget={id:this.formData.applicationTarget.id ,name:this.formData.applicationTarget.appName}
-        this.selectedAppSrc=this.formData.applicationSrc.id
-        this.selectedAppTarget =this.formData.applicationTarget.id
-      })
-      .catch((error) => {
-        console.log(error)
-      })}
+        axios
+          .get(`${this.endpoint}/${id}`)
+          .then((response) => {
+            this.formData = response.data
+            this.defaultValueSource = {
+              id: this.formData.applicationSrc.id,
+              name: this.formData.applicationSrc.appName
+            }
+            this.defaultValueTarget = {
+              id: this.formData.applicationTarget.id,
+              name: this.formData.applicationTarget.appName
+            }
+            this.selectedAppSrc = this.formData.applicationSrc.id
+            this.selectedAppTarget = this.formData.applicationTarget.id
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     submitForm() {
-      console.log("el formdata melowel")
+      console.log('el formdata melowel')
       console.log(this.formData)
-      console.log("el formdata melowel")
+      console.log('el formdata melowel')
       // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
@@ -247,17 +262,14 @@ export default {
           console.log(error)
         })
     },
-  onSourceAppSelected(selectedOption) {
-      this.selectedAppSrc = selectedOption.id;
-      this.applicationsTarget = this.applications.filter(app => app.id !== selectedOption.id);
-
+    onSourceAppSelected(selectedOption) {
+      this.selectedAppSrc = selectedOption.id
+      this.applicationsTarget = this.applications.filter((app) => app.id !== selectedOption.id)
     },
     onTargetAppSelected(selectedOption) {
-      this.selectedAppTarget = selectedOption.id;
-      this.applicationsSource = this.applications.filter(app => app.id !== selectedOption.id);
-
-
-    },
+      this.selectedAppTarget = selectedOption.id
+      this.applicationsSource = this.applications.filter((app) => app.id !== selectedOption.id)
+    }
   }
 }
 </script>

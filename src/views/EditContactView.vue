@@ -68,8 +68,8 @@ const FORM_CONFIGS = {
 }
 
 export default {
-  props :{
-    idContact:Number
+  props: {
+    idContact: Number
   },
   components: {
     Navbar,
@@ -86,7 +86,7 @@ export default {
     idContact: {
       immediate: true,
       handler(newIdContact) {
-        this.loadData(newIdContact);
+        this.loadData(newIdContact)
       }
     }
   },
@@ -99,16 +99,17 @@ export default {
   },
   methods: {
     loadData(idContact) {
-      if(idContact!==0){
-      axios
-        .get(`${this.endpoint}/${this.idContact}`)
-        .then((response) => {
-          this.formData = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }},
+      if (idContact !== 0) {
+        axios
+          .get(`${this.endpoint}/${this.idContact}`)
+          .then((response) => {
+            this.formData = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     submitForm() {
       // Check if required fields are empty
       for (const field of this.formFields) {

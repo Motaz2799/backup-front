@@ -39,11 +39,10 @@
               </select>
             </template>
           </div>
-          <button @click.prevent="submit" class="btn btn-primary"  >Next</button>
+          <button @click.prevent="submit" class="btn btn-primary">Next</button>
         </form>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -73,35 +72,37 @@ export default {
   },
   methods: {
     submitForm() {
-          // Check if required fields are empty
-          for (const field of this.formFields) {
-            if (field.required && !this.formData[field.name]) {
-              alert(`${field.label} is required`);
-              return false;
-            }
-          }
-          
-          return true;
-        },
-      submit(){
-        if(this.submitForm()==true){
-      this.responseDataCenter = JSON.stringify(this.formData)
+      // Check if required fields are empty
+      for (const field of this.formFields) {
+        if (field.required && !this.formData[field.name]) {
+          alert(`${field.label} is required`)
+          return false
+        }
+      }
 
-      axios
-        .post('http://localhost:8080/api/v1/datacenters', this.responseDataCenter, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((response) => {
-          console.log(response.data)
-          alert('Resource created successfully!')
-          window.location.reload()
-          this.$router.push('/datacenters')
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }}}
+      return true
+    },
+    submit() {
+      if (this.submitForm() == true) {
+        this.responseDataCenter = JSON.stringify(this.formData)
+
+        axios
+          .post('http://localhost:8080/api/v1/datacenters', this.responseDataCenter, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((response) => {
+            console.log(response.data)
+            alert('Resource created successfully!')
+            window.location.reload()
+            this.$router.push('/datacenters')
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      }
+    }
   }
+}
 </script>

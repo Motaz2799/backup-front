@@ -55,7 +55,8 @@ export default {
     Footer
   },
   props: {
-    idDb: Number},
+    idDb: Number
+  },
   data() {
     return {
       formData: {},
@@ -67,7 +68,7 @@ export default {
     idDb: {
       immediate: true,
       handler(newIdDb) {
-        this.loadData(newIdDb);
+        this.loadData(newIdDb)
       }
     }
   },
@@ -81,16 +82,17 @@ export default {
 
   methods: {
     loadData(idDb) {
-      if(idDb!==0){
-      axios
-        .get(`${this.endpoint}/${idDb}`)
-        .then((response) => {
-          this.formData = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }},
+      if (idDb !== 0) {
+        axios
+          .get(`${this.endpoint}/${idDb}`)
+          .then((response) => {
+            this.formData = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     submitForm() {
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
