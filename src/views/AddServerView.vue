@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container my-3">
+      <div id="errorContainerServer"></div>
       <div class="row justify-content-center">
         <div class="col-md-6">
           <label for="dc_select" class="form-label">Select a Datacenter:</label>
@@ -51,7 +52,7 @@
             />
           </template>
         </div>
-        <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
+        <button @click.prevent="submitFormServer" class="btn btn-primary">Next</button>
       </form>
     </div>
   </div>
@@ -156,17 +157,9 @@ export default {
         }
       })
     },
-
-    submitForm() {
-      // Check if required fields are empty
-      for (const field of this.formFields) {
-        if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
-        }
-      }
-
-      this.responseServer = JSON.stringify(this.formData)
+    submitFormServer(){
+      if (this.submitForm() == true)  {
+        this.responseServer = JSON.stringify(this.formData)
 
       axios
         .post('http://localhost:8080/api/v1/servers', this.responseServer, {
@@ -187,6 +180,24 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+      }
+      },
+
+      submitForm() {
+      // Check if required fields are empty
+      for (const field of this.formFields) {
+        if (field.required && !this.formData[field.name]) {
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorContainerServer').innerHTML = errorMessage;
+          
+          return false
+        }
+      }
+      return true
     }
   }
 }

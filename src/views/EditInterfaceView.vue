@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container">
+      <div id="errorInterfaceEdit"></div>
       <div class="mt-5">
         <div class="row align-items-center">
           <div class="col-md-6">
@@ -77,7 +78,7 @@
             </select>
           </template>
         </div>
-        <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
+        <button @click.prevent="submitFormInterface" class="btn btn-primary">Next</button>
       </form>
     </div>
   </div>
@@ -221,17 +222,23 @@ export default {
       }
     },
     submitForm() {
-      console.log('el formdata melowel')
-      console.log(this.formData)
-      console.log('el formdata melowel')
       // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorInterfaceEdit').innerHTML = errorMessage;
+          
+          return false
         }
       }
-
+      return true
+    },
+    submitFormInterface() {
+     if(this.submitForm()){
       const idsrc = this.selectedAppSrc
       const idtarget = this.selectedAppTarget
       const protocol = this.formData.protocol
@@ -261,6 +268,9 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+     }
+
+      
     },
     onSourceAppSelected(selectedOption) {
       this.selectedAppSrc = selectedOption.id

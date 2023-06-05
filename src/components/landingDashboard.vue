@@ -1,7 +1,12 @@
 <template>
-  <div class="container mt-4">
-    <div class="row mb-5">
-      <div class="col-md-8">
+  <div class="container-fluid mt-4 mt-4">
+    <div v-if="!assessmentCompleted" class="alert alert-warning" role="alert">
+        <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+        Please complete the assessment for a better evaluation
+        </div>
+        <div class="row mb-5">
+        <div class="col-md-6">
+
         <caption class="wide-column">
           <div>{{ appName }}</div>
           <div class="btn-group dropend">
@@ -39,7 +44,7 @@
             </ul>
           </div>
         </caption>
-        <h6>{{ appDescription }}</h6>
+        <h6 class="text-muted">{{ appDescription }}</h6>
         
         
         <div class="card">
@@ -58,7 +63,7 @@
           <path d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm2 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2.5.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
           <path d="M2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1v2H2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2h-1V7h1a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm13 2v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm0 7v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm-3-4v2H4V7h8z"/>
         </svg> Servers: {{ serversCount }} -->
-      <div class="col-md-4">
+      <div class="col-md-4" style="padding-left: 150px;">
         <div class="card" style="width: 15.2rem">
           <div class="card-header">Insights</div>
           <ul class="list-group list-group-flush">
@@ -222,55 +227,46 @@
       </div>
     </div>
     
-
-    <div>
-  <i @mouseleave="showMessage = false" @mouseenter="showMessage = true">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-      <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-    </svg>
-  </i>
-  <span v-if="showMessage" class="dialog">Hello</span>
-</div>
 <!-- <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="This top tooltip is themed via CSS variables.">
       Custom tooltip
     </button> -->
 
-  
-
-    
-
-    <div v-if="serversCount === 0" class="alert alert-warning" role="alert">
-      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
-      No servers available for this application
-    </div>
-
-    <div v-if="interfacesCount === 0" class="alert alert-warning" role="alert">
-      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
-      No interfaces available for this application.
-    </div>
-    <div v-if="databasesCount === 0" class="alert alert-warning" role="alert">
-      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
-      No databases available for this application.
-    </div>
     <div>
-      <div v-if="!assessmentCompleted" class="alert alert-warning" role="alert">
-        <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
-        Please complete the assessment to get evaluation
-      </div>
-      <button
-        v-if="!ShowImage"
-        type="button"
-        @click="fetchButtonImage"
-        class="menuItem-active-link btn btn-sm btn-secondary"
-      >
-        Get anyway
+
+      <div v-if="ShowEvaluate===false" class="card w-50">
+      <div class="card-body">
+        <h5 class="card-title">Evaluate application</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <button  type="button" @click="getEvaluation" class="menuItem-active-link btn btn-sm btn-secondary">
+          Evaluate Application 
       </button>
-      <div class="image-container">
-        <img v-if="ShowImage" :src="Image" alt="Strategy" />
+    </div>
+    </div>
+    </div>
+
+      <div class="card text-center" v-if="ShowRecommandation">
+      <div class="card-header">
+        Recommended Strategy
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ recommendedStrategy[0].key }}</h5>
+        <p class="card-text">{{ recommendedStrategy[0].value}}</p>
+        <button type="button" @click="fetchButtonImage" v-if="ShowImage===false" class="menuItem-active-link btn btn-sm btn-secondary">
+          Show more details
+        </button>  
+        <img v-if="ShowImage" :src="Image" alt="Strategy" style="max-width: 100%; height: auto;" />  
+        <div v-if="ShowImage" class="tab-content border-left-0 border-right-0 border-bottom-0">
+      <div class="tab-pane active" id="help" role="tabpanel" tabindex="0" aria-hidden="false" aria-labelledby="tab991750">
+        <p>From this view, you can edit or delete entry of your web site. You can also add an entry by clicking on "Add news" button.</p>
+        <p>You can reorder column by clicking on them.</p>
+        <p>Finally, you can search an item by typing his title or his ID in the search field, at the top of the page.</p>
       </div>
     </div>
+      </div>
+    </div>
+    <br><br><br><br>
   </div>
+ 
 </template>
 
 <script>
@@ -303,7 +299,10 @@ export default {
       databasesCount: null,
       interfacesCount: null,
       assessmentCompleted: true,
-      ShowImage: false
+      ShowImage: false,
+      ShowEvaluate:false,
+      ShowRecommandation:false,
+      recommendedStrategy:{}
     }
   },
 
@@ -342,11 +341,27 @@ export default {
         console.error(error)
       })
   },
-  methods: {
+  methods: {    
+    getEvaluation() {
+      axios.get(`http://localhost:5000/api/v1/strategy/${this.id}/non-detailed`) 
+        .then(response => {
+          const data = response.data;
+
+          this.recommendedStrategy = Object.keys(data).map(key => {
+            return { key, value: data[key] };
+          });
+          this.ShowRecommandation=true
+          this.ShowEvaluate=true
+          console.log(this.recommendedStrategy)
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
     
     fetchButtonImage() {
       axios
-        .get(`http://localhost:5000/api/v1/strategy/${this.id}`, {
+        .get(`http://localhost:5000/api/v1/strategy/${this.id}/detailed`, {
           responseType: 'arraybuffer'
         })
         .then((response) => {
@@ -358,7 +373,6 @@ export default {
           )
           this.Image = `data:image/png;base64, ${base64Image}`
           this.ShowImage = true
-          this.assessmentCompleted = true
         })
         .catch((error) => {
           console.error("Erreur lors de la récupération de l'image", error)
@@ -418,7 +432,7 @@ export default {
 }
 
 .image-container {
-  height: 100px;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -426,7 +440,7 @@ export default {
 
 .image-container img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 150%;
   object-fit: contain;
 }
 

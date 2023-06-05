@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="mb-3">
+      <div id="errorInterface"></div>
       <div class="row justify-content-center">
         <div class="col-md-6">
           <label for="app-select-src" class="form-label">Select a Source Application:</label>
@@ -58,7 +59,7 @@
             </select>
           </template>
         </div>
-        <button class="btn btn-primary" @click="submitInterfaces">Add interface</button>
+        <button class="btn btn-primary" @click.prevent="submitInterfaces">Add interface</button>
       </form>
     </div>
   </div>
@@ -108,7 +109,8 @@ export default {
           options: [
             { label: 'EXTERNAL', value: 'EXTERNAL' },
             { label: 'INTERNAL', value: 'INTERNAL' }
-          ]
+          ],
+          required: true
         },
         {
           name: 'frequency',
@@ -120,10 +122,12 @@ export default {
             { label: 'WEEKLY', value: 'WEEKLY' },
             { label: 'MONTHLY', value: 'MONTHLY' },
             { label: 'ON_DEMAND', value: 'ON_DEMAND' }
-          ]
+          ],
+          required: true
         },
         {
           name: 'processingMode',
+          required: true,
           label: 'Processing Mode',
           type: 'select',
           options: [
@@ -163,6 +167,22 @@ export default {
     })
   },
   methods: {
+    submitForm() {
+      // Check if required fields are empty
+      for (const field of this.formFields) {
+        if (field.required && !this.formData[field.name]) {
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorInterface').innerHTML = errorMessage;
+          
+          return false
+        }
+      }
+      return true
+    },
     onSourceAppSelected(selectedOption) {
       this.selectedAppSrc = selectedOption.id
       this.applicationsTarget = this.applications.filter((app) => app.id !== selectedOption.id)
@@ -172,7 +192,8 @@ export default {
       this.applicationsSource = this.applications.filter((app) => app.id !== selectedOption.id)
     },
     submitInterfaces() {
-      axios
+      if(this.submitForm()){
+        axios
         .post('http://localhost:8080/api/v1/interfaces', {
           applicationSrc: {
             id: this.selectedAppSrc
@@ -196,6 +217,8 @@ export default {
           // handle error response
           console.log(error.response.data)
         })
+      }
+      
     }
   }
 }

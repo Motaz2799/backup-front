@@ -1,7 +1,9 @@
 <template>
   <div>
+    
     <div class="container my-3 mx-0">
       <div class="container">
+        <div id="errorContainer"></div>
         <form class="my-4">
           <div v-for="(field, index) in formFields" :key="index" class="mb-3">
             <label class="form-label">
@@ -50,6 +52,9 @@ import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import axios from 'axios'
 import ComboBox from '../components/ComboBox.vue'
+
+
+
 
 export default {
   components: {
@@ -234,8 +239,14 @@ export default {
       // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorContainer').innerHTML = errorMessage;
+          
+          return false
         }
       }
       return true

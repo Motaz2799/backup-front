@@ -2,6 +2,7 @@
   <div>
     <div class="mb-5">
       <div class="container">
+        <div id="errorENV"></div>
         <form class="mt-5">
           <div v-for="(field, index) in formFields" :key="index" class="mb-3">
             <label class="form-label">
@@ -39,7 +40,7 @@
               </select>
             </template>
           </div>
-          <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
+          <button @click.prevent="submitFormENV" class="btn btn-primary">Next</button>
         </form>
       </div>
     </div>
@@ -90,11 +91,22 @@ export default {
       // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorENV').innerHTML = errorMessage;
+          
+          return false
         }
       }
-      this.responseEnvironments = JSON.stringify(this.formData)
+      return true
+    },
+    submitFormENV() {
+      // Check if required fields are empty
+      if (this.submitForm()) {
+        this.responseEnvironments = JSON.stringify(this.formData)
 
       axios
         .post('http://localhost:8080/api/v1/environments', this.responseEnvironments, {
@@ -111,6 +123,8 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+      }
+      
     }
   }
 }

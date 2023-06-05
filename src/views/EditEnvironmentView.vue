@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container">
+      <div id="errorENVEdit"></div>
       <form class="mt-4">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <label class="form-label">
@@ -38,7 +39,7 @@
             </select>
           </template>
         </div>
-        <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
+        <button @click.prevent="submitFormENV" class="btn btn-primary">Next</button>
       </form>
     </div>
   </div>
@@ -119,12 +120,22 @@ export default {
       // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorENVEdit').innerHTML = errorMessage;
+          
+          return false
         }
       }
-
-      axios
+      return true
+    },
+    submitFormENV() {
+      // Check if required fields are empty
+      if(this.submitForm()){
+        axios
         .put(`${this.endpoint}/${this.idEnv}`, this.formData)
         .then((response) => {
           console.log(response.data)
@@ -135,6 +146,9 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+      }
+
+      
     }
   }
 }

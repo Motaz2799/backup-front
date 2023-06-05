@@ -36,6 +36,7 @@
               type="button"
               data-bs-toggle="modal"
               data-bs-target="#exampleModalToggleApplication"
+              data-bs-display="static"
               >Via form</a
             >
             <a
@@ -242,6 +243,7 @@
         </div>
       </div>
     </div>
+    
 
     <div id="showAddApplication">
       <div
@@ -267,6 +269,7 @@
         </div>
       </div>
     </div>
+    
 
     <div id="showEditApplication">
       <div

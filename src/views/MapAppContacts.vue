@@ -1,6 +1,7 @@
 <template>
   <div class="mb-3">
     <div class="container">
+      <div id="errorContainerContact"></div>
       <form class="mt-5">
         <div v-for="(field, index) in formFields" :key="index" class="mb-3">
           <label class="form-label">
@@ -146,8 +147,14 @@ export default {
       // Check if required fields are empty
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorContainerContact').innerHTML = errorMessage;
+          
+          return false
         }
       }
       return true

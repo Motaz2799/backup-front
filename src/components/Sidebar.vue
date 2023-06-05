@@ -46,32 +46,38 @@
                 {{ step.step }}
               </a>
               <div class="collapse" id="category-collapse" v-if="currentStepIndex === index + 1">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" v-if="showCategories">
+                  <li v-for="(category, index) in step.categories" :key="category.id">
+                    <a
+                      v-if="category.isCompleted"
+                      @click="onCategoryChange(index)"
+                      class="rounded alert alert-success alert-sm"
+                      role="alert"
+                      style="border: none"
+                    >
+                      <span class="sr-only alert-icon"
+                        ><span class="sr-only visually-hidden">Success</span></span
+                      >
 
-<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" v-if="showCategories">
+                      {{ category.category }}
+                    </a>
 
-  <li v-for="(category, index) in step.categories" :key="category.id">
+                    <a
+                      v-else
+                      @click="onCategoryChange(index)"
+                      class="rounded alert alert-warning alert-sm"
+                      role="alert"
+                      style="border: none"
+                    >
+                      <span class="sr-only alert-icon"
+                        ><span class="sr-only visually-hidden">Warning</span></span
+                      >
 
-    <a v-if="category.isCompleted" @click="onCategoryChange(index)" class="rounded alert alert-success alert-sm" role="alert" style=" border: none;">
-
-      <span class=" sr-only alert-icon" ><span class=" sr-only visually-hidden">Success</span></span>
-
-      {{ category.category }}
-
-    </a>
-
-    <a v-else @click="onCategoryChange(index)" class="rounded alert alert-warning alert-sm" role="alert" style=" border: none;">
-
-      <span class="sr-only alert-icon" ><span class="sr-only visually-hidden">Warning</span></span>
-
-      {{ category.category }}
-
-    </a>
-
-  </li>
-
-</ul>
-
-</div>
+                      {{ category.category }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>

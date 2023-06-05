@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container">
+      <div id="errorContainerEditServer"></div>
       <div class="mt-5">
         <div class="row justify-content-center">
           <div class="col-md-6">
@@ -61,7 +62,7 @@
             />
           </template>
         </div>
-        <button @click.prevent="submitForm" class="btn btn-primary">Next</button>
+        <button @click.prevent="submitFormServer" class="btn btn-primary">Next</button>
       </form>
     </div>
   </div>
@@ -235,16 +236,25 @@ export default {
         }
       })
     },
-    submitForm() {
-      // Check if required fields are empty
+    submitForm(){
       for (const field of this.formFields) {
         if (field.required && !this.formData[field.name]) {
-          alert(`${field.label} is required`)
-          return
+          
+          const errorMessage = `<div class="alert alert-danger" role="alert" >
+      <span class="alert-icon"><span class="visually-hidden">Warning</span></span>
+      <p style="font-weight:500; height:8px;">${field.label} is required</p>
+    </div>`;
+      document.getElementById('errorContainerEditServer').innerHTML = errorMessage;
+          
+          return false
         }
       }
-
-      if (this.selectedDataCenter !== 0 && this.selectedEnvironment !== 0) {
+      return true
+    },
+    submitFormServer() {
+      
+      if (this.submitForm()) {
+        if (this.selectedDataCenter !== 0 && this.selectedEnvironment !== 0) {
         this.envDcAdd(this.idServ, this.selectedDataCenter, this.selectedEnvironment)
           .then(() => {
             this.formData.datacenter = this.datacenters.find(
@@ -280,6 +290,9 @@ export default {
           .catch((error) => {
             console.log(error)
           })
+      }
+
+      
       }
     },
     onDatacenterSelected(selectedOption) {
